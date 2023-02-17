@@ -1,7 +1,5 @@
 package com.webage.domain;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,13 +20,13 @@ public class Registration {
 	long id;
 	
 	@Column(name="EVENT_ID")
-	long eventId;
+	String eventId;
 	
 	@Column(name="CUSTOMER_ID")
-	long customerId;
+	String customerId;
 	
 	@Column(name="REGISTRATION_DATE")
-	LocalDateTime date;
+	String date;
 	
 	String notes;
 
@@ -40,27 +38,27 @@ public class Registration {
 		this.id = id;
 	}
 
-	public long getEventId() {
+	public String getEventId() {
 		return eventId;
 	}
 
-	public void setEventId(long eventId) {
+	public void setEventId(String eventId) {
 		this.eventId = eventId;
 	}
 
-	public long getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(long customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 
-	public LocalDateTime getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDateTime date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

@@ -59,23 +59,11 @@ public class RegistrationAPI {
 			@PathVariable("registrationId") long registrationId) 
 	{
 		// Workshop: Implementation to update an event. Think about error handling.
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		try {
-			Registration registration = repo.findById(registrationId).get();
-			registration.setCustomerId(newRegistration.getCustomerId());
-			registration.setDate(newRegistration.getDate());
-			registration.setEventId(newRegistration.getEventId());
-			registration.setNotes(newRegistration.getNotes());
-			repo.save(registration );
-			map.put("status", 1);
-			map.put("data", repo.findById(registrationId));
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		} catch (Exception ex) {
-			map.clear();
-			map.put("status", 0);
-			map.put("message", "Registration is not found");
-			return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+		if (newRegistration.getEventId() == null || newRegistration.getCustomerId() == null ) { //|| newRegistration.getRegistration_date() == null) {
+			return ResponseEntity.badRequest().build();
 		}
+		newRegistration = repo.save(newRegistration);
+		return ResponseEntity.ok().build();
 	}	
 	
 	@DeleteMapping("/{eventId}")

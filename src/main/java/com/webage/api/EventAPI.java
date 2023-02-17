@@ -59,22 +59,11 @@ public class EventAPI {
 			@PathVariable("eventId") long eventId) 
 	{
 		//  Workshop:  Implement a method to update an entitye in response to a PUT message.
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		try {
-			Event event = repo.findById(eventId).get();
-			event.setTitle(newEvent.getTitle());
-			event.setCode(newEvent.getCode());
-			event.setDescription(newEvent.getDescription());
-			repo.save(event);
-			map.put("status", 1);
-			map.put("data", repo.findById(eventId));
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		} catch (Exception ex) {
-			map.clear();
-			map.put("status", 0);
-			map.put("message", "Event is not found");
-			return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+		if (newEvent.getId() != eventId || newEvent.getCode() == null || newEvent.getTitle() == null || newEvent.getDescription() == null) {
+			return ResponseEntity.badRequest().build();
 		}
+		newEvent = repo.save(newEvent);
+		return ResponseEntity.ok().build();
 	}	
 	
 	@DeleteMapping("/{eventId}")

@@ -130,25 +130,11 @@ public class CustomerAPI {
 		//  Workshop:  Write an implementation to update or create a new customer with an HTTP PUT, with the 
 		//  requestor specifying the customer ID.  Are there error conditions to be handled?  How much data
 		//  validation should you implement considering that customers are stored in a CustomersRepository object.
-		if (newCustomer.getId()!=customerId || newCustomer.getName()==null || newCustomer.getEmail() == null || newCustomer.getPassword() == null) {
+		if (newCustomer.getId() != customerId || newCustomer.getName() == null || newCustomer.getEmail() == null) {
 			return ResponseEntity.badRequest().build();
 		}
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		try {
-			Customer customer = repo.findById(customerId).get();
-			customer.setName(newCustomer.getName());
-			customer.setEmail(newCustomer.getEmail());
-			customer.setPassword(newCustomer.getPassword());
-			repo.save(customer);
-			map.put("status", 1);
-			map.put("data", repo.findById(customerId));
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		} catch (Exception ex) {
-			map.clear();
-			map.put("status", 0);
-			map.put("message", "Customer is not found");
-			return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
-		}
+		newCustomer = repo.save(newCustomer);
+		return ResponseEntity.ok().build();
 		
 	}	
 	
