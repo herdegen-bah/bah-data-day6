@@ -1,5 +1,7 @@
 package com.webage.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ public class Registration {
 	long customerId;
 	
 	@Column(name="REGISTRATION_DATE")
-	String date;
+	LocalDateTime date;
 	
 	String notes;
 
@@ -54,11 +56,11 @@ public class Registration {
 		this.customerId = customerId;
 	}
 
-	public String getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
