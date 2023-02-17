@@ -1,5 +1,7 @@
 package com.webage.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +28,7 @@ public class Registration {
 	String customerId;
 	
 	@Column(name="REGISTRATION_DATE")
-	String date;
+	Date date;
 	
 	String notes;
 
@@ -54,11 +56,11 @@ public class Registration {
 		this.customerId = customerId;
 	}
 
-	public String getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
