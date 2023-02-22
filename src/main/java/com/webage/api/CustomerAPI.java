@@ -2,6 +2,7 @@ package com.webage.api;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.webage.domain.Customer;
+import com.webage.logging.ApiLogger;
 import com.webage.repository.CustomersRepository;
 
 @RestController
@@ -70,26 +72,36 @@ public class CustomerAPI {
 		//  your response should be if no customer matches the name the caller is searching for.
 		//  With the data model implemented in CustomersRepository, do you need to handle more than
 		//  one match per request?
-		ArrayList<Customer> customer = new ArrayList<Customer>();
-		Iterable<Customer> customerList = repo.findAll();
-		for(Customer c: customerList) {
-			if (c.getName().equalsIgnoreCase(username)) {
-				customer.add(c);
-			}
+//		ArrayList<Customer> customer = new ArrayList<Customer>();
+//		Iterable<Customer> customerList = repo.findAll();
+//		for(Customer c: customerList) {
+//			if (c.getName().equalsIgnoreCase(username)) {
+//				customer.add(c);
+//			}
+//		}
+//		
+//		Map<String, Object> map = new LinkedHashMap<String, Object>();
+//		
+//		if (!customer.isEmpty()) {
+//			map.put("status", 1);
+//			map.put("data", customer);
+//			return new ResponseEntity<>(map, HttpStatus.OK);
+//		} else {
+//			map.clear();
+//			map.put("status", 0);
+//			map.put("message", "Data is not found");
+//			return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+//		}
+		ApiLogger.log("username: " + username);
+		Iterator<Customer> customers = repo.findAll().iterator();
+		while(customers.hasNext()) {
+			Customer cust = customers.next();
+			if(cust.getName().equals(username)) {
+				ResponseEntity<?> response = ResponseEntity.ok(cust);
+				return response;				
+			}			
 		}
-		
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		
-		if (!customer.isEmpty()) {
-			map.put("status", 1);
-			map.put("data", customer);
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		} else {
-			map.clear();
-			map.put("status", 0);
-			map.put("message", "Data is not found");
-			return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
-		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 	
 	//lookupCustomerByName POST

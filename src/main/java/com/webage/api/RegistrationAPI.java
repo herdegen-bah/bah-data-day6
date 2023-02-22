@@ -56,7 +56,7 @@ public class RegistrationAPI {
 			@RequestBody Registration newRegistration,
 			@PathVariable("registrationId") long eventId) 
 	{
-		if (newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null ) { //|| newRegistration.getRegistration_date() == null) {
+		if (newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null ) { 
 			return ResponseEntity.badRequest().build();
 		}
 		newRegistration = repo.save(newRegistration);
