@@ -50,6 +50,14 @@ public class AuthFilter implements Filter{
 						return;
 					}
 				}
+				else {
+					res.setStatus(403);
+				}
+				
+			}
+			else {
+				res.setStatus(403);
+				return;
 			}
 		}
 	}
