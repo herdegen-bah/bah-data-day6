@@ -12,23 +12,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name="REGISTRATIONS")
 public class Registration {
-	//  Workshop:
-	//
-	//  Implement Registration.  Your implementation is very likely going to change 
-	//  over time as you add functionality 
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	long id;
 	
 	@Column(name="EVENT_ID")
-	String eventId;
+	String event_id;
 	
 	@Column(name="CUSTOMER_ID")
-	String customerId;
+	String customer_id;
 	
-	@Column(name="REGISTRATION_DATE")
-	Date date;
+	Date registration_date;
 	
 	String notes;
 
@@ -40,28 +35,28 @@ public class Registration {
 		this.id = id;
 	}
 
-	public String getEventId() {
-		return eventId;
+	public String getEvent_id() {
+		return event_id;
 	}
 
-	public void setEventId(String eventId) {
-		this.eventId = eventId;
+	public void setEvent_id(String event_id) {
+		this.event_id = event_id;
 	}
 
-	public String getCustomerId() {
-		return customerId;
+	public String getCustomer_id() {
+		return customer_id;
 	}
 
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
+	public void setCustomer_id(String customer_id) {
+		this.customer_id = customer_id;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getRegistration_date() {
+		return registration_date;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setRegistration_date(Date registration_date) {
+		this.registration_date = registration_date;
 	}
 
 	public String getNotes() {
@@ -72,5 +67,6 @@ public class Registration {
 		this.notes = notes;
 	}
 	
-
+	
+	
 }

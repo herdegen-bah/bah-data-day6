@@ -1,8 +1,6 @@
 package com.webage.api;
 
 import java.net.URI;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,60 +29,45 @@ public class RegistrationAPI {
 
 	@GetMapping
 	public Iterable<Registration> getAll() {
-		//  Workshop:  Implementation to return existing registrations
 		return repo.findAll();
 	}
 
 	@GetMapping("/{registrationId}")
 	public Optional<Registration> getRegistrationById(@PathVariable("registrationId") long id) {
-		//  Workshop:  Implementation to return a single registration from an ID
+		// return repo.findOne(id);
 		return repo.findById(id);
 	}
 
 	@PostMapping
 	public ResponseEntity<?> addRegistration(@RequestBody Registration newRegistration, UriComponentsBuilder uri) {
-		//  Workshop:  Implementation to add a new registration; think about data validation and error handling.
-		if(newRegistration.getId() != 0 || newRegistration.getDate() == null || newRegistration.getNotes() == null) {
+		if (newRegistration.getId() != 0 || newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null || newRegistration.getRegistration_date() == null) {
+			// Reject we'll assign the event id
 			return ResponseEntity.badRequest().build();
 		}
 		newRegistration = repo.save(newRegistration);
-		URI location=ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newRegistration.getId()).toUri();
-		ResponseEntity<?> response=ResponseEntity.created(location).build();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newRegistration.getId()).toUri();
+		ResponseEntity<?> response = ResponseEntity.created(location).build();
 		return response;
 	}
 
 	@PutMapping("/{registrationId}")
 	public ResponseEntity<?> putRegistration(
 			@RequestBody Registration newRegistration,
-			@PathVariable("registrationId") long registrationId) 
+			@PathVariable("registrationId") long eventId) 
 	{
-		// Workshop: Implementation to update an event. Think about error handling.
-		if (newRegistration.getEventId() == null || newRegistration.getCustomerId() == null ) { //|| newRegistration.getRegistration_date() == null) {
+		if (newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null ) { //|| newRegistration.getRegistration_date() == null) {
 			return ResponseEntity.badRequest().build();
 		}
 		newRegistration = repo.save(newRegistration);
 		return ResponseEntity.ok().build();
 	}	
 	
-	@DeleteMapping("/{eventId}")
-	public ResponseEntity<?> deleteRegistrationById(@PathVariable("eventId") long id) {
-		//  Workshop:  Implementation to delete an event.  For discussion (do not implement unless
-		//  you are sure you have time):  Are there checks you should make to ensure validity of 
-		//  data across various entities?  Where should these checks be implemented.  Are there
-		//  advantages and disadvantages to separating data into separate independent entities,
-		//  each with it's own "microservice"?
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		try {
-			repo.deleteById(id);
-			map.put("status", 1);
-			map.put("message", "Registration is deleted successfully!");
-			return new ResponseEntity<>(map, HttpStatus.OK);
-		} catch (Exception ex) {
-			map.clear();
-			map.put("status", 0);
-			map.put("message", "Registration is not found");
-			return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
-		}
+	@DeleteMapping("/{registrationId}")
+	public ResponseEntity<?> deleteRegistrationById(@PathVariable("registrationId") long id) {
+		// repo.delete(id);
+		repo.deleteById(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}	
 	
 }
