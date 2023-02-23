@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 import com.webage.jwt.JWTHelper;
+import com.webage.logging.ApiLogger;
 
 @Component
 public class AuthFilter implements Filter{
@@ -57,9 +59,19 @@ public class AuthFilter implements Filter{
 			}
 			else {
 				res.setStatus(403);
-				return;
+				
 			}
-		}
+		}res.sendError(HttpServletResponse.SC_FORBIDDEN, "failed authentication");
+	}
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		ApiLogger.log("AuthFilter.init");
+		
+	}
+
+	@Override
+	public void destroy() {
+		ApiLogger.log("AuthFilter.destroy");	
 	}
 	
 }
