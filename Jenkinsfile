@@ -1,6 +1,6 @@
 node {
     stage ("Checkout DataService"){
-        git branch: 'main', url: ' https://github.com/herdegen-bah/project_day2_mine.git'
+        git branch: 'main', url: 'https://github.com/herdegen-bah/bah-data-day6.git'
     }
     
     stage ("Gradle Build - DataService") {
@@ -12,6 +12,19 @@ node {
     stage ("Gradle Bootjar-Package - DataService") {
         sh 'gradle bootjar'
     }
+	
+	stage ("Containerize the app-docker build - DataApi") {
+        sh 'docker build --rm -t mcc-data:v1.0 .'
+    }
+    
+    stage ("Inspect the docker image - DataApi"){
+        sh "docker images mcc-data:v1.0"
+        sh "docker inspect mcc-data:v1.0"
+    }
+    
+    stage ("Run Docker container instance - DataApi"){
+        sh "docker run -d --rm --name mcc-data -p 8080:8080 mcc-data:v1.0"
+     }
     
     stage('User Acceptance Test - DataService') {
 	
@@ -22,8 +35,8 @@ node {
 	  if(response=="Yes") {
 
 	    stage('Release- DataService') {
-	     sh 'gradle build -x test'
-	     sh 'echo DataService is ready to release!'
+		 sh "docker stop mcc-data"
+	     sh 'echo MCC DataService is ready to release!'
 
 	    }
 	  }
