@@ -23,7 +23,7 @@ node {
     }
     
 	stage ("Run Docker container instance - DataApi"){
-        sh "docker run -d --rm --name event-data -p 8080:8080 event-data:v1.0"
+        sh "docker run -d --rm --name data-day7 -p 8080:8080 event-data:v1.0"
     }
     
 	stage('User Acceptance Test - DataApi') {
