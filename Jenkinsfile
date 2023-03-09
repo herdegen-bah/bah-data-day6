@@ -20,9 +20,6 @@ node {
 		sh 'docker rmi data-day7 || true'
 	}
 	
-
-	
-    
 	stage('User Acceptance Test - DataApi') {
 	
 	  def response= input message: 'Is this build good to go?',
@@ -37,6 +34,7 @@ node {
 	    }
 	  }
     }
+    
     stage ("Production Deployment View"){
     	sh "kubectl get deployments"
     	sh "kubectl get pods"
