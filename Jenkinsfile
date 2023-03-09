@@ -13,18 +13,19 @@ node {
         sh 'gradle bootjar'
     }
 	
-	stage ("Containerize the app-docker build - DataApi") {
-        sh 'docker build --rm -t data-day7:v1.0 .'
-    }
-    
-    stage ("Inspect the docker image - DataApi"){
-        sh "docker images data-day7:v1.0"
-        sh "docker inspect data-day7:v1.0"
-    }
-    
-	stage ("Run Docker container instance - DataApi"){
-        sh "docker run -d --rm --name data-day7 -p 8080:8080 data-day7:v1.0"
-    }
+	stage("Delete Previous Env - DataApi"){
+		sh 'kubectl delete deployment data-day7 || true'
+		sh 'kubectl delete service data-day7 || true'
+		sh 'docker rmi data-day7 || true'
+	}
+	
+	stage ("Build the Docker image - DataApi"){
+		sh "docker build --rm -t settlagekl/data-day7:v1.0 ."
+	}
+	stage ("Inspect the docker image - DataApi"){
+		sh "docker images data-day7:v1.0"
+		sh "docker inspect data-day7:v1.0"
+	}
     
 	stage('User Acceptance Test - DataApi') {
 	
@@ -33,9 +34,9 @@ node {
 	   description: '', name: 'Pass')]
 	
 	  if(response=="Yes") {
-	    stage('Deploy to Kubenetes cluster - DataApi') {
+	    stage('Deploy to Kubernetes cluster - DataApi') {
 		  
-	      sh "kubectl create deployment data-day7 --image=settlagekl/data-day7:v1.0"
+	      sh "kubectl create deployment data-day7 --image=data-day7:v1.0"
 		  sh "kubectl expose deployment data-day7 --type=LoadBalancer --port=8080"
 	    }
 	  }
