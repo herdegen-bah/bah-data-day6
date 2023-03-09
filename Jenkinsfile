@@ -16,6 +16,7 @@ node {
 	stage("Delete Previous Env - DataApi"){
 		sh 'kubectl delete deployment data-day7 || true'
 		sh 'kubectl delete service data-day7 || true'
+		sh 'docker rm data-day7 || true'
 		sh 'docker rmi data-day7 || true'
 	}
 	
