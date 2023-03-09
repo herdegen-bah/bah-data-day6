@@ -35,7 +35,7 @@ node {
 	  if(response=="Yes") {
 	    stage('Deploy to Kubenetes cluster - DataApi') {
 		  
-	      sh "kubectl create deployment data-day7 --image=data-day7:v1.0"
+	      sh "kubectl create deployment data-day7 --image=settlagekl/data-day7:v1.0"
 		  sh "kubectl expose deployment data-day7 --type=LoadBalancer --port=8080"
 	    }
 	  }
