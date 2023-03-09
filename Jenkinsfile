@@ -14,31 +14,35 @@ node {
     }
 	
 	stage ("Containerize the app-docker build - DataApi") {
-        sh 'docker build --rm -t mcc-data:v1.0 .'
+        sh 'docker build --rm -t data-day7:v1.0 .'
     }
     
     stage ("Inspect the docker image - DataApi"){
-        sh "docker images mcc-data:v1.0"
-        sh "docker inspect mcc-data:v1.0"
+        sh "docker images data-day7:v1.0"
+        sh "docker inspect data-day7:v1.0"
     }
     
-    stage ("Run Docker container instance - DataApi"){
-        sh "docker run -d --rm --name mcc-data -p 8080:8080 mcc-data:v1.0"
-     }
+	stage ("Run Docker container instance - DataApi"){
+        sh "docker run -d --rm --name event-data -p 8080:8080 event-data:v1.0"
+    }
     
-    stage('User Acceptance Test - DataService') {
+	stage('User Acceptance Test - DataApi') {
 	
 	  def response= input message: 'Is this build good to go?',
 	   parameters: [choice(choices: 'Yes\nNo', 
 	   description: '', name: 'Pass')]
 	
 	  if(response=="Yes") {
-
-	    stage('Release- DataService') {
-		 sh "docker stop mcc-data"
-	     sh 'echo MCC DataService is ready to release!'
-
+	    stage('Deploy to Kubenetes cluster - DataApi') {
+		  
+	      sh "kubectl create deployment data-day7 --image=data-day7:v1.0"
+		  sh "kubectl expose deployment data-day7 --type-LoadBalancer --port=8080"
 	    }
 	  }
+    }
+    stage ("Production Deployment View"){
+    	sh "kubectl get deployments"
+    	sh "kubectl get pods"
+    	sh "kubectl get services"
     }
 }
